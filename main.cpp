@@ -12,6 +12,7 @@ enum class filechanges: int
      removed,
      changed
 };
+
 struct customFile;
 struct Subject;
 struct IObserver
@@ -110,8 +111,8 @@ int main(int argc, char** argv) try
      customFile file(filepath, std::ios_base::out);
      auto pObserver = std::make_unique<FileObserver>();
      file.addObserver(pObserver.get());
-     file.writeToFile("hihfdsafdasfdsafdsafadsfadsfdsafdsihih");
-     //file.removeFile(filepath);
+     file.writeToFile("xyz");
+     file.removeFile(filepath);
      return EXIT_SUCCESS;
 }
 catch(std::exception& e)
