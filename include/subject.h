@@ -26,6 +26,7 @@ public:
      /// @brief деструктор
      virtual ~Subject();
 
+protected:
      /// @brief оповещение наблюдателей
      /// @param subject класс обслуживания
      void notify(const Subject& subject);
