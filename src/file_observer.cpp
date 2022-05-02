@@ -12,7 +12,7 @@ void FileObserver::onNotify(const Subject& file)
      const std::string filename = file_.getFilename();
      if (fs::exists(filename))
      {
-          const std::time_t current_modified_time = check_last_modified_time(filename);
+          const std::time_t current_modified_time = get_modified_time(filename);
           if (fs::is_empty(filename))
           {
                std::cout << "[OBSERVER] : " << "The file is empty but" << std::endl;
@@ -39,7 +39,7 @@ void FileObserver::onNotify(const Subject& file)
      std::cout << "[OBSERVER] : " << "The file was removed!" << std::endl;
 }
 
-std::time_t FileObserver::check_last_modified_time(const std::string& path)
+std::time_t FileObserver::get_modified_time(const std::string& path)
 {
      auto ftime = std::filesystem::last_write_time(path);
      return std::chrono::system_clock::to_time_t(std::chrono::file_clock::to_sys(ftime));

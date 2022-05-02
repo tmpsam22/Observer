@@ -110,7 +110,7 @@ struct FileObserver : IObserver
           const std::string filename = file_.getFilename();
           if (fs::exists(filename)) // check to empty
           {
-               const std::string current_modified_time = check_last_modified_time(filename);
+               const std::string current_modified_time = get_modified_time(filename);
                if (fs::is_empty(filename))
                {
                     std::cout << "File is empty" << std::endl;
@@ -135,7 +135,7 @@ struct FileObserver : IObserver
      }
 private:
 
-     std::string check_last_modified_time(const std::string& path)
+     std::string get_modified_time(const std::string& path)
      {
           auto ftime = std::filesystem::last_write_time(path);
           std::time_t cftime = std::chrono::system_clock::to_time_t(std::chrono::file_clock::to_sys(ftime));
