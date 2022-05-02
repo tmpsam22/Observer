@@ -12,38 +12,51 @@ void FileObserver::onNotify(const Subject& file)
      const std::string filename = file_.getFilename();
      if (fs::exists(filename))
      {
-          const std::string current_modified_time = check_last_modified_time(filename);
+          const std::time_t current_modified_time = check_last_modified_time(filename);
           if (fs::is_empty(filename))
           {
-               std::cout << "File is empty" << std::endl;
-               std::cout << "Created time:\t" << current_modified_time << std::endl;
+               std::cout << "[OBSERVER] : " << "The file is empty but" << std::endl;
+               std::cout << "\twas created in:\t" << serialize(current_modified_time) << std::endl;
                return;
           }
-          if (last_modified_time_.empty())
+
+          if (!last_modified_time_)
           {
                set_modified_time(current_modified_time);
           }
-          std::string to_out_ {"File exists.\nLast modifed time:\t" + last_modified_time_};
-          if (!last_modified_time_.empty() && current_modified_time != last_modified_time_)
+
+          std::string to_out_ {"[OBSERVER] : The file exists.\nLast modified time:\t" + serialize(last_modified_time_)};
+          if (last_modified_time_ && (current_modified_time != last_modified_time_))
           {
-               to_out_ = "File changed. \nCurrent modified time\t:" + current_modified_time +
-                    +"Last modified time\t:" + last_modified_time_;
+               to_out_ = "[OBSERVER] : The file has been changed.\nCurrent modified time:\t" + serialize(current_modified_time)
+                         + "Last modified time:\t" + serialize(last_modified_time_);
                set_modified_time(current_modified_time);
           }
           std::cout << to_out_ << "Size:\t" << fs::file_size(filename) << std::endl;
           return;
      }
-     std::cout << "File was removed" << std::endl;
+
+     std::cout << "[OBSERVER] : " << "The file was removed!" << std::endl;
 }
 
-std::string FileObserver::check_last_modified_time(const std::string& path)
+std::time_t FileObserver::check_last_modified_time(const std::string& path)
 {
      auto ftime = std::filesystem::last_write_time(path);
-     std::time_t cftime = std::chrono::system_clock::to_time_t(std::chrono::file_clock::to_sys(ftime));
-     return std::asctime(std::localtime(&cftime));
+     return std::chrono::system_clock::to_time_t(std::chrono::file_clock::to_sys(ftime));
 }
 
-void FileObserver::set_modified_time(const std::string& modified_time)
+void FileObserver::set_modified_time(std::time_t modified_time)
 {
      last_modified_time_ = modified_time;
+}
+
+std::string FileObserver::serialize(std::time_t time)
+{
+     return std::asctime(std::localtime(&time));
+}
+
+FileObserver::FileObserver()
+     : last_modified_time_ { 0 }
+{
+
 }

@@ -8,6 +8,7 @@ class Subject;
 struct IObserver
 {
      virtual void onNotify(const Subject&) = 0;
+
      virtual ~IObserver() { }
 };
 

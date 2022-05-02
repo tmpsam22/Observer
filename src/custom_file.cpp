@@ -1,6 +1,6 @@
 #include <custom_file.h>
 #include <filesystem>
-
+#include <iostream>
 customFile::customFile(const std::string& filename, std::ios_base::openmode openmode)
           : filename_(filename)
           , file_(filename, openmode)
@@ -11,22 +11,33 @@ customFile::customFile(const std::string& filename, std::ios_base::openmode open
      }
 }
 
-void customFile::writeToFile(const std::string& text, std::ios::openmode openmode)
+void customFile::writeToFile(const std::string& text, responseToObservers response, std::ios::openmode openmode)
 {
+     file_.clear();
+
      if (!file_.is_open())
      {
           file_.open(filename_, openmode);
      }
+
      file_ << text;
+
+     if (response == responseToObservers::notification_on)
+     {
+          update();
+     }
 }
 
-void customFile::closeFile()
+void customFile::closeFile(responseToObservers response)
 {
      file_.close();
-     update();
+     if (response == responseToObservers::notification_on)
+     {
+          update();
+     }
 }
 
-void customFile::openFile(const std::string& filename, std::ios::openmode openmode)
+void customFile::openFile(const std::string& filename, responseToObservers response, std::ios::openmode openmode)
 {
      if (filename != filename_)
      {
@@ -35,17 +46,23 @@ void customFile::openFile(const std::string& filename, std::ios::openmode openmo
      }
 
      file_.open(filename, openmode);
-     update();
+     if (response == responseToObservers::notification_on)
+     {
+          update();
+     }
 }
 
-bool customFile::removeFile()
+bool customFile::removeFile(responseToObservers response)
 {
      bool is_removed = std::filesystem::remove(filename_);
 
      if (is_removed)
      {
           filename_ = "";
-          update();
+          if (response == responseToObservers::notification_on)
+          {
+               update();
+          }
      }
      return is_removed;
 }
@@ -63,4 +80,10 @@ customFile::~customFile()
 void customFile::update()
 {
      notify(*this);
+}
+
+customFile::customFile()
+     : filename_ { }
+     , file_  { }
+{
 }

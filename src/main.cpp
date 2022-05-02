@@ -9,7 +9,6 @@
 int main(int argc, char** argv) try
 {
      const std::string filepath = argc == 2 ? argv[1] : "../default.txt";
-     std::cout << filepath << std::endl;
      customFile file(filepath, std::ios_base::out);
      auto observer = std::make_unique<FileObserver>();
      file.addObserver(observer.get());
@@ -24,30 +23,31 @@ int main(int argc, char** argv) try
           };
           while (true)
           {
-               std::this_thread::sleep_for(std::chrono::seconds(3));
+               std::this_thread::sleep_for(std::chrono::seconds(2));
                std::srand(std::time(nullptr));
                int rand_value = std::rand() % 3 + 1;
                switch (rand_value)
                {
                     case 1 :
-                         std::cout << "**\nRewrite a file" << std::endl;
-                         file.openFile(filepath);
+                         std::cout << "**\nRefreshing a file" << std::endl;
+                         file.openFile(filepath, customFile::responseToObservers::notification_on);
                          std::cout << "**\n";
                          break;
                     case 2:
                     {
                          std::string to_write_ = shuffle_string(std::rand() % 50 + 1);
-                         std::cout << "**\nWriting to file:" << to_write_ << std::endl;
+                         std::cout << "**\nWriting to the file message:\t" << to_write_ << std::endl;
                          file.writeToFile(to_write_);
                          std::this_thread::sleep_for(std::chrono::seconds(1));
-                         file.closeFile();
+                         file.closeFile(customFile::responseToObservers::notification_on);
                          std::cout << "**\n";
                          break;
                     }
                     case 3:
-                         std::cout << "Removing a file" << std::endl;
-                         file.removeFile();
-                         file.openFile(filepath);
+                         std::cout << "~~\nRemoving and reopening a file" << std::endl;
+                         file.removeFile(customFile::responseToObservers::notification_on);
+                         file.openFile(filepath, customFile::responseToObservers::notification_on);
+                         std::cout << "~~\n";
                }
           }
      #endif
