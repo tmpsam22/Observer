@@ -1,5 +1,6 @@
 #include <subject.h>
 #include <observer_iface.h>
+#include <algorithm>
 
 void Subject::addObserver(IObserver* observer)
 {
@@ -8,7 +9,17 @@ void Subject::addObserver(IObserver* observer)
 
 void Subject::removeObserver(IObserver* observer)
 {
-
+     observers_.erase(std::remove_if(observers_.begin(), observers_.end(),
+          [observer](IObserver* observer_)
+          {
+               if (observer != observer_)
+               {
+                    return false;
+               }
+               return true;
+          }),
+          observers_.end()
+     );
 }
 
 void Subject::notify(const Subject& subject)
