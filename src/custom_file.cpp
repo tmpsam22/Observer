@@ -1,7 +1,10 @@
 #include <custom_file.h>
 #include <filesystem>
 
-customFile::customFile(const std::string& filename, std::ios_base::openmode openmode)
+customFile::customFile(
+          const std::string& filename,
+          std::ios_base::openmode openmode
+)
           : filename_(filename)
           , file_(filename, openmode)
 {
@@ -11,7 +14,11 @@ customFile::customFile(const std::string& filename, std::ios_base::openmode open
      }
 }
 
-void customFile::writeToFile(const std::string& text, responseToObservers response, std::ios::openmode openmode)
+void customFile::writeToFile(
+     const std::string& text,
+     std::ios::openmode openmode,
+     responseToObservers response
+)
 {
      file_.clear();
 
@@ -37,7 +44,11 @@ void customFile::closeFile(responseToObservers response)
      }
 }
 
-void customFile::openFile(const std::string& filename, responseToObservers response, std::ios::openmode openmode)
+void customFile::openFile(
+     const std::string& filename,
+     std::ios::openmode openmode,
+     responseToObservers response
+)
 {
      if (filename != filename_)
      {

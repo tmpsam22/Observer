@@ -39,8 +39,11 @@ public:
      /// @param text данные, записываемые в файл
      /// @param response флаг коллбека
      /// @param openmode флаг открытия файла
-     void writeToFile(const std::string& text, responseToObservers response = responseToObservers::notification_on,
-          std::ios::openmode openmode = std::ios::out);
+     void writeToFile(
+          const std::string& text,
+          std::ios::openmode openmode = std::ios::out,
+          responseToObservers response = responseToObservers::notification_on
+     );
 
      /// @brief закрытие файла
      /// @param response флаг коллбека
@@ -50,8 +53,11 @@ public:
      /// @param filename название файла ( path приветствуется )
      /// @param response флаг коллбека
      /// @param openmode флаг открытия файла
-     void openFile(const std::string& filename, responseToObservers response = responseToObservers::notification_on,
-          std::ios::openmode openmode = std::ios::out);
+     void openFile(
+          const std::string& filename,
+          std::ios::openmode openmode = std::ios::out,
+          responseToObservers response = responseToObservers::notification_on
+     );
 
      /// @brief удаление файла
      /// @param response флаг коллбека
