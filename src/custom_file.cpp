@@ -1,6 +1,6 @@
 #include <custom_file.h>
 #include <filesystem>
-#include <iostream>
+
 customFile::customFile(const std::string& filename, std::ios_base::openmode openmode)
           : filename_(filename)
           , file_(filename, openmode)

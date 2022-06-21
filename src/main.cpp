@@ -30,7 +30,7 @@ int main(int argc, char** argv) try
                {
                     case 1 :
                          std::cout << "**\nRefreshing a file" << std::endl;
-                         file.openFile(filepath, customFile::responseToObservers::notification_on);
+                         file.openFile(filepath);
                          std::cout << "**\n";
                          break;
                     case 2:
@@ -39,14 +39,14 @@ int main(int argc, char** argv) try
                          std::cout << "**\nWriting to the file message:\t" << to_write_ << std::endl;
                          file.writeToFile(to_write_);
                          std::this_thread::sleep_for(std::chrono::seconds(1));
-                         file.closeFile(customFile::responseToObservers::notification_on);
+                         file.closeFile();
                          std::cout << "**\n";
                          break;
                     }
                     case 3:
                          std::cout << "~~\nRemoving and reopening a file" << std::endl;
-                         file.removeFile(customFile::responseToObservers::notification_on);
-                         file.openFile(filepath, customFile::responseToObservers::notification_on);
+                         file.removeFile();
+                         file.openFile(filepath);
                          std::cout << "~~\n";
                }
           }

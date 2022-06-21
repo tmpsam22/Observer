@@ -15,8 +15,8 @@ void FileObserver::onNotify(const Subject& file)
           const std::time_t current_modified_time = get_modified_time(filename);
           if (fs::is_empty(filename))
           {
-               std::cout << "[OBSERVER] : " << "The file is empty but" << std::endl;
-               std::cout << "\twas created in:\t" << serialize(current_modified_time) << std::endl;
+               std::cout << "[OBSERVER] : " << "The file was empty but" << std::endl;
+               std::cout << "\thas been created. Time:\t" << serialize(current_modified_time) << std::endl;
                return;
           }
 
