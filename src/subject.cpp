@@ -16,7 +16,6 @@ void Subject::removeObserver(IObserver* observer)
                {
                     return false;
                }
-               delete observer;
                return true;
           }),
           observers_.end()

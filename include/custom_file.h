@@ -71,6 +71,8 @@ public:
      /// @brief Деструктор
      ~customFile() override;
 
+private:
+
      /// @brief Обновление данных в файле
      /// оповещает наблюдателей
      void update();
