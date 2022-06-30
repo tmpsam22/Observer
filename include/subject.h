@@ -19,14 +19,15 @@ public:
      /// @param IObserver интерфейс наблюдателя
      void addObserver(IObserver* observer);
 
-     /// @brief удалить из списка наблюдателя
+     /// @brief удалить наблюдателя из списка
      /// @param IObserver интерфейс наблюдателя
      void removeObserver(IObserver* observer);
 
      /// @brief деструктор
-     virtual ~Subject();
+     virtual ~Subject() = default;
 
 protected:
+
      /// @brief оповещение наблюдателей
      /// @param subject класс обслуживания
      void notify(const Subject& subject);

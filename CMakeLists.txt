@@ -9,6 +9,6 @@ set(SOURCE
      ${CURRENT_DIR}/src/custom_file.cpp
      ${CURRENT_DIR}/src/file_observer.cpp
 )
-add_definitions(-DTEST)
+
 include_directories(${CMAKE_PROJECT_NAME} ${CURRENT_DIR}/include)
 add_executable(${CMAKE_PROJECT_NAME} ${SOURCE})
