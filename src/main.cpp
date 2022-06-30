@@ -22,6 +22,13 @@ std::string shuffle_string()
 
 int main(int argc, char** argv) try
 {
+     // достаточно запустить скрипт start_build.sh, который собирает проект
+     // и запускает исполняемый файл observer
+     // возможные входные параметра:
+     // название файла над которым будет производиться тестирование
+     // если такой параметр не задан, то в корневой папке проекта будет создан
+     // файл с именем default.txt
+
      const std::string filepath = argc == 2 ? argv[1] : "../default.txt";
      std::cout << "File name:\t" << filepath << std::endl;
 
