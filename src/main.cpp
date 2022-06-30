@@ -9,7 +9,7 @@
 /// функция генерации строки
 /// @return генерируемая строка
 // данная функция используется для записи в файл сгенерированной строки
-std::string shuffle_string()
+std::string get_random_string()
 {
      std::srand(std::time(nullptr));
      auto lenght = std::rand()%20 + 1;
@@ -75,7 +75,7 @@ int main(int argc, char** argv) try
                }
                case 2:
                {
-                    std::string to_write_ = shuffle_string();
+                    std::string to_write_ = get_random_string();
                     std::cout << "Case 2 : writing random generate string to file (it resets the data)\t"
                          << "String to be written: " << to_write_ << std::endl;
                     file.writeToFile(to_write_);
@@ -86,7 +86,7 @@ int main(int argc, char** argv) try
                }
                case 3:
                {
-                    std::string to_write_ = shuffle_string();
+                    std::string to_write_ = get_random_string();
                     std::cout << "Case 3 : writing random generate string to end of file (it does not reset the data)\t"
                          << "String to be written: " << to_write_ << std::endl;
                     file.writeToFile(to_write_, std::ios_base::app);
