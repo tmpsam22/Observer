@@ -28,7 +28,7 @@ void FileObserver::onNotify(const Subject& file)
 
           if (fs::is_empty(filename)) // если файл пуст, значит он был только создан:
           {
-               std::cout << "[OBSERVER] : " << "The file was empty but" << std::endl;
+               std::cout << "[OBSERVER] : " << "The file is empty and" << std::endl;
                std::cout << "\thas been created. Time:\t" << serialize(current_modified_time) << std::endl;
                return;
           }

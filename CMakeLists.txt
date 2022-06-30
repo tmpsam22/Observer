@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.20)
 set(CMAKE_CXX_STANDARD 20)
 
-project(observer)
+project(testing_observer)
 set (CURRENT_DIR ${CMAKE_CURRENT_SOURCE_DIR})
 set(SOURCE
      ${CURRENT_DIR}/src/main.cpp

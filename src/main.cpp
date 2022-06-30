@@ -9,7 +9,7 @@
 /// функция генерации строки
 /// @return генерируемая строка
 // данная функция используется для записи в файл сгенерированной строки
-std::string shuffle_string()
+std::string get_random_string()
 {
      std::srand(std::time(nullptr));
      auto lenght = std::rand()%20 + 1;
@@ -27,100 +27,138 @@ int main(int argc, char** argv) try
      // возможные входные параметра:
      // название файла над которым будет производиться тестирование
      // если такой параметр не задан, то в корневой папке проекта будет создан
-     // файл с именем default.txt
+     // файл с именем test_default.txt
 
-     const std::string filepath = argc == 2 ? argv[1] : "../default.txt";
+     const std::string filepath = argc == 2 ? argv[1] : "../test_default.txt";
      std::cout << "File name:\t" << filepath << std::endl;
 
-     customFile file(filepath, std::ios_base::out);
-     auto observer = std::make_unique<FileObserver>();
-     file.addObserver(observer.get());
-
-     auto helper_output = []()
+     // Проверяем работает ли наблюдатель
+     auto test1 = [&]()
      {
-          std::cout << "The following values for testing:\n"
-               << "1 - to open file with out open mode (it resets the data)" << std::endl
-               << "2 - to write random generate string to file (it resets the data)" << std::endl
-               << "3 - to write random generate string to end of file (it does not reset the data)" << std::endl
-               << "4 - to remove file" << std::endl
-               << "5 - get file name" << std::endl
-               << "6 - to quit" << std::endl;
+          // Создание объекта для взаимодействия с файлом
+          customFile file(filepath, std::ios_base::out); // filepath – имя файла
+
+          // Создание наблюдателя над файлом
+          auto observer = std::make_unique<FileObserver>();
+
+          // Добавление наблюдателя в список подписчиков на объект file
+          file.addObserver(observer.get());
+
+          // Закрытие файла -> отправляется оповещение наблюдателю
+          file.closeFile();
      };
 
-     while (true)
+     // Проверяем работает ли удаление из списка
+     auto test2 = [&]()
      {
-          helper_output();
-          int value_{};
-          while( !(std::cin >> value_) ) // ожидаем только число
-          {
-               std::cin.clear(); // очищаем флаг для последующего чтения
-               while (std::cin.get() != '\n')
-               {
-                    continue;
-               }
-               std::cout << "Please enter valid value. Manual:" << std::endl;
-               helper_output();
-          }
+          // Создание объекта для взаимодействия с файлом
+          customFile file(filepath, std::ios_base::out); // filepath – имя файла
 
-          switch (value_)
-          {
-               case 1 :
-               {
-                    std::cout << "Case 1 : opening file with out open mode" << std::endl;
-                    file.openFile(filepath);
-                    std::cout << "...closing file to save state" << std::endl;
-                    file.closeFile();
-                    std::cout << "--------------END OF CASE 1--------------\n";
-                    break;
-               }
-               case 2:
-               {
-                    std::string to_write_ = shuffle_string();
-                    std::cout << "Case 2 : writing random generate string to file (it resets the data)\t"
-                         << "String to be written: " << to_write_ << std::endl;
-                    file.writeToFile(to_write_);
-                    std::cout << "...closing file to save state" << std::endl;
-                    file.closeFile();
-                    std::cout << "--------------END OF CASE 2--------------\n";
-                    break;
-               }
-               case 3:
-               {
-                    std::string to_write_ = shuffle_string();
-                    std::cout << "Case 3 : writing random generate string to end of file (it does not reset the data)\t"
-                         << "String to be written: " << to_write_ << std::endl;
-                    file.writeToFile(to_write_, std::ios_base::app);
-                    std::cout << "...closing file to save state" << std::endl;
-                    file.closeFile();
-                    std::cout << "--------------END OF CASE 3--------------\n";
+          // Создание наблюдателя над файлом
+          auto observer = std::make_unique<FileObserver>();
 
-                    break;
-               }
-               case 4:
-               {
-                    std::cout << "Case 4: \nremoving file\n";
-                    file.removeFile();
-                    std::cout << "--------------END OF CASE 4--------------\n";
-                    break;
-               }
-               case 5:
-               {
-                    std::cout <<"Case 5: getting file name" << std::endl;
-                    std::cout << filepath << std::endl;
-                    std::cout << "--------------END OF CASE 5--------------\n";
-                    break;
-               }
-               case 6:
-               {
-                    std::cout << "Case 6: quiting a programm..." << std::endl;
-                    return EXIT_SUCCESS;
-               }
-               default:
-                    helper_output();
-          }
-          std::cout << "_____________________________\n\n";
-          std::this_thread::sleep_for(std::chrono::seconds(5)); // интервал ввода 5 секунд
-     }
+          // Добавление наблюдателя в список подписчиков на объект file
+          file.addObserver(observer.get());
+
+          // Удаление из списка наблюдателя
+          file.removeObserver(observer.get());
+
+          // Закрытие файла и сохранение состояние файла -> отправляется оповещение наблюдателю
+          file.closeFile();
+     };
+
+     // Проверяем работает ли оповещение для двух и более наблюдателей
+     auto test3 = [&]()
+     {
+          // Создание объекта для взаимодействия с файлом
+          customFile file(filepath, std::ios_base::out); // filepath – имя файла
+
+          // Создание первого наблюдателя над файлом
+          auto observer_first = std::make_unique<FileObserver>();
+
+          // Создание второго наблюдателя над файлом
+          auto observer_second = std::make_unique<FileObserver>();
+
+          // Добавление первого наблюдателя в список подписчиков на объект file
+          file.addObserver(observer_first.get());
+
+          // Добавление второго наблюдателя в список подписчиков на объект file
+          file.addObserver(observer_second.get());
+
+          // Закрытие файла и сохранение состояние файла -> отправляется оповещение наблюдателям
+          file.closeFile();
+     };
+
+     // Перезапись данных в файл
+     auto test4 = [&]()
+     {
+          // Создание объекта для взаимодействия с файлом
+          customFile file(filepath, std::ios_base::out); // filepath – имя файла
+
+          // Создание наблюдателя над файлом
+          auto observer = std::make_unique<FileObserver>();
+
+          // Добавление наблюдателя в список подписчиков на объект file
+          file.addObserver(observer.get());
+
+          // Перезапись в файл рандомно сгенерированной строки,
+          // отправляется оповещение наблюдателю
+          file.writeToFile(get_random_string());
+
+          // Закрытие файл и сохранение состояние -> отправляется оповещение наблюдателю
+          file.closeFile();
+
+     };
+
+     // Запись данных в конец имеющегося файла
+     auto test5 = [&]()
+     {
+          // Создание объекта для взаимодействия с файлом
+          customFile file(filepath, std::ios_base::out); // filepath – имя файла
+
+          // Создание наблюдателя над файлом
+          auto observer = std::make_unique<FileObserver>();
+
+          // Добавление наблюдателя в список подписчиков на объект file
+          file.addObserver(observer.get());
+
+          // Перезапись в файл рандомно сгенерированной строки
+          file.writeToFile(get_random_string(), std::ios_base::out,
+               customFile::responseToObservers::notification_off);
+
+          // Сохранение состояние файла
+          file.closeFile(customFile::responseToObservers::notification_off);
+
+          // Запись данных в конец имеющегося файла,
+          // отправляется оповещение наблюдателю
+          file.writeToFile(get_random_string(), std::ios_base::app);
+
+          // Закрытие файл и сохранение состояние -> отправляется оповещение наблюдателю
+          file.closeFile();
+     };
+
+     // Удаление существующего файла
+     auto test6 = [&]()
+     {
+          // Создание объекта для взаимодействия с файлом
+          customFile file(filepath, std::ios_base::out); // filepath – имя файла
+
+          // Создание наблюдателя над файлом
+          auto observer = std::make_unique<FileObserver>();
+
+          // Добавление наблюдателя в список подписчиков на объект file
+          file.addObserver(observer.get());
+
+          // Удаление файла
+          file.removeFile();
+     };
+
+     //test1(); // запуск 1-го теста
+     //test2(); // запуск 2-го теста
+     //test3(); // запуск 3-го теста
+     //test4(); // запуск 4-го теста
+     //test5(); // запуск 5-го теста
+     test6(); // запуск 6-го теста
      return EXIT_SUCCESS;
 }
 catch(std::exception& e)
